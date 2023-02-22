@@ -4,6 +4,7 @@ coverage
 coverage.json
 typechain
 typechain-types
+./client/node_modules
 
 # Hardhat files
 cache

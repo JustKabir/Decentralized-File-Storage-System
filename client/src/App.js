@@ -5,12 +5,14 @@ import FileUpload from "./components/FileUpload";
 import Display from "./components/Display";
 import Modal from "./components/Modal";
 import "./App.css";
+import GetDataInput from "./components/getDataInput";
 
 function App() {
   const [account, setAccount] = useState("");
   const [contract, setContract] = useState(null);
   const [provider, setProvider] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [data, setData] = useState("");
 
   useEffect(() => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -28,7 +30,7 @@ function App() {
         const signer = provider.getSigner();
         const address = await signer.getAddress();
         setAccount(address);
-        let contractAddress = "Your Contract Address Here";
+        let contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
         const contract = new ethers.Contract(
           contractAddress,
@@ -44,32 +46,46 @@ function App() {
     };
     provider && loadProvider();
   }, []);
+
+
+
   return (
     <>
-      {!modalOpen && (
-        <button className="share" onClick={() => setModalOpen(true)}>
-          Share
-        </button>
-      )}
-      {modalOpen && (
-        <Modal setModalOpen={setModalOpen} contract={contract}></Modal>
-      )}
-
+      {
+        modalOpen && (
+          <Modal setModalOpen={setModalOpen} contract={contract} />
+        )
+      }
       <div className="App">
-        <h1 style={{ color: "white" }}>Gdrive 3.0</h1>
-        <div class="bg"></div>
-        <div class="bg bg2"></div>
-        <div class="bg bg3"></div>
-
-        <p style={{ color: "white" }}>
-          Account : {account ? account : "Not connected"}
-        </p>
-        <FileUpload
-          account={account}
-          provider={provider}
-          contract={contract}
-        ></FileUpload>
-        <Display contract={contract} account={account}></Display>
+        <div className="header">
+          <h1 className="app-logo">DGdrive3.0</h1>
+          <p className="account">
+            Account : {account ? account : "Not connected"}
+          </p>
+        </div>
+        <main>
+          <div className="main-grid-container">
+            <div className="sider">
+              <FileUpload
+                account={account}
+                provider={provider}
+                contract={contract}
+              />
+              <GetDataInput contract={contract} account={account} setData={setData} />
+              {
+                !modalOpen && (
+                  <>
+                    <p className="share-title">Share your data</p>
+                    <button className="share-btn" onClick={() => setModalOpen(true)}>
+                      Share
+                    </button>
+                  </>
+                )
+              }
+            </div>
+            <Display data={data} />
+          </div>
+        </main>
       </div>
     </>
   );

@@ -4,6 +4,7 @@ import "./FileUpload.css";
 const FileUpload = ({ contract, account, provider }) => {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("No image selected");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (file) {
@@ -16,8 +17,8 @@ const FileUpload = ({ contract, account, provider }) => {
           url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
           data: formData,
           headers: {
-            pinata_api_key: `Enter Your Key`,
-            pinata_secret_api_key: `Enter Your Secret Key`,
+            pinata_api_key: `0080251b11c6d5a95289`,
+            pinata_secret_api_key: `1fa4f8e274d0382550dce707ba4fb123b78b8102481f22eaeb8a224e9b4ee8f4`,
             "Content-Type": "multipart/form-data",
           },
         });
@@ -44,23 +45,29 @@ const FileUpload = ({ contract, account, provider }) => {
     setFileName(e.target.files[0].name);
     e.preventDefault();
   };
+
   return (
-    <div className="top">
-      <form className="form" onSubmit={handleSubmit}>
-        <label htmlFor="file-upload" className="choose">
-          Choose Image
+    <div>
+      <form onSubmit={handleSubmit}>
+        <p className="upload-title">Upload an image</p>
+        <label htmlFor="file-upload" className="file-upload">
+          <div className="image-name">
+            {fileName}
+          </div>
+          <input
+            disabled={!account}
+            type="file"
+            id="file-upload"
+            name="data"
+            onChange={retrieveFile}
+          />
+          <div className="file-btn-group">
+            <div className="choose-btn">Choose Image</div>
+            <button type="submit" href="#" disabled={!file} className="upload-btn">
+              Upload Image
+            </button>
+          </div>
         </label>
-        <input
-          disabled={!account}
-          type="file"
-          id="file-upload"
-          name="data"
-          onChange={retrieveFile}
-        />
-        <span className="textArea">Image: {fileName}</span>
-        <button type="submit" className="upload" disabled={!file}>
-          Upload File
-        </button>
       </form>
     </div>
   );
